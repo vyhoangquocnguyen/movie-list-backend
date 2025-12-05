@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// USER MODEL
+model User {
+  id    String @id @default(cuid())
+  email String @unique
+  name  String
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  movies Movie [] @relation("MovieCreator")
+  watchListItems WatchListItem[]
+}
+
+// MOVIE MODEL
+model Movie {
+  id        String @id @default(cuid())
+  title     String
+  overview  String?
+  releaseYear Int
+  genre     String[] @default([])
+  runtime   Int?
+  posterUrl String?
+  createdBy String
+  createdAt DateTime @default(now())
+
+  // Relations
+  creator User @relation("MovieCreator", fields: [createdBy], references: [id], onDelete: Cascade)
+  watchListItems WatchListItem[]
+}
+
+model WatchListItem {
+  id String @id @default(cuid())
+  userId String
+  movieId String
+  status WatchListStatus @default(PLANNED)
+  rating Int?
+  note String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+// Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+}
+
+enum WatchListStatus {
+  PLANNED
+  WATCHING
+  COMPLETED
+  DROPPED
+}
