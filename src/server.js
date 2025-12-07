@@ -20,10 +20,8 @@ app.use("/movies", movieRoutes);
 app.use("/auth", authRoutes);
 app.use("/watchlist", watchlistRoutes);
 
-const PORT = 5001;
-
-const server = app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+const server = app.listen(process.env.PORT || 5001, "0.0.0.0", () => {
+  console.log(`Server started on port ${process.env.PORT || 5001}`);
 });
 
 // Handle unhandled promise rejections
