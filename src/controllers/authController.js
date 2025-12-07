@@ -78,6 +78,7 @@ const login = async (req, res) => {
       data: {
         user: {
           id: userExist.id,
+          name: userExist.name,
           email: email,
         },
         token,
@@ -87,7 +88,7 @@ const login = async (req, res) => {
     console.error("Login error:", error);
     res.status(500).json({
       error: "Internal server error",
-      message: error.message,
+      ...(process.env.NODE_ENV === "development" && { debug: error.message }),
     });
   }
 };
