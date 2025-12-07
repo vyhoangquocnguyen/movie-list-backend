@@ -9,8 +9,6 @@ const adapter = new PrismaNeon({ connectionString });
 // Initialize Prisma Client with adapter
 const prisma = new PrismaClient({ adapter });
 
-const userId = "cmitywpc50000g85wukiijhvk";
-
 const movies = [
   {
     title: "The Shawshank Redemption",
